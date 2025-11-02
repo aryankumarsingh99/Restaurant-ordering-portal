@@ -2,6 +2,10 @@
 
 A modern, full-featured restaurant ordering system built with Next.js 16, TypeScript, and Tailwind CSS. Features a clean, professional design inspired by industry leaders like DoorDash and Uber Eats.
 
+This comprehensive web application provides an end-to-end solution for restaurant ordering, featuring 91 dishes across 6 international cuisines, advanced filtering and search capabilities, multiple payment options, and a powerful admin dashboard for real-time order management. Built with performance and user experience in mind, it combines the latest web technologies with a minimal, intuitive interface that makes ordering food effortless for customers and managing orders simple for restaurant staff.
+
+Perfect for restaurants looking to establish or upgrade their online presence with a professional, scalable ordering platform that can be customized and deployed quickly.
+
 ![Next.js](https://img.shields.io/badge/Next.js-16.0.1-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38bdf8)
