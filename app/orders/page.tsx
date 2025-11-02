@@ -83,159 +83,191 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">My Orders</h1>
-
-        {newOrderId && (
-          <div className="bg-green-100 border-2 border-green-500 rounded-xl p-4 mb-6">
-            <p className="text-green-800 dark:text-green-200 font-semibold flex items-center gap-2">
-              <CheckCircle className="w-5 h-5" />
-              Order placed successfully! Your food will arrive in approximately 30 minutes.
-            </p>
+    <div className="min-h-screen bg-slate-50">
+      {/* Modern Header */}
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="max-w-6xl mx-auto flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900">My Orders</h1>
+              <p className="text-sm text-slate-500">{orders.length} total orders</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Package className="w-5 h-5 text-orange-600" />
+              <span className="text-sm font-semibold text-slate-700">Order History</span>
+            </div>
           </div>
-        )}
+        </div>
+      </div>
 
-        <div className="space-y-4">
-          {orders.map((order) => (
-            <div
-              key={order.id}
-              className="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden"
-            >
-              {/* Order Header */}
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl font-bold">Order #{order.id}</h3>
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 ${getStatusColor(
-                          order.status
-                        )}`}
-                      >
-                        {getStatusIcon(order.status)}
-                        {getStatusText(order.status)}
-                      </span>
+      <div className="container mx-auto px-4 py-6">
+        <div className="max-w-6xl mx-auto">
+          {/* Success Alert */}
+          {newOrderId && (
+            <div className="bg-white border-l-4 border-green-500 rounded-xl p-4 mb-6 shadow-md">
+              <div className="flex items-start gap-3">
+                <div className="bg-green-100 p-2 rounded-lg">
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-slate-900 mb-1">Order Confirmed!</p>
+                  <p className="text-sm text-slate-600">Your order has been placed successfully. Estimated ready time: 30 minutes.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-4">
+            {orders.map((order) => (
+              <div
+                key={order.id}
+                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-slate-200"
+              >
+                {/* Order Header */}
+                <div className="p-4 border-b border-slate-100">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="text-left">
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-lg font-bold text-slate-900">Order #{order.id}</h3>
+                          <span
+                            className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+                              order.status
+                            )}`}
+                          >
+                            {getStatusIcon(order.status)}
+                            {getStatusText(order.status)}
+                          </span>
+                        </div>
+                        <p className="text-sm text-slate-500 mt-1">
+                          {new Date(order.orderDate).toLocaleDateString("en-US", {
+                            weekday: "short",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-sm text-slate-600">
-                      {new Date(order.orderDate).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-slate-900">
+                        ${order.total.toFixed(2)}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {order.items.reduce((sum, item) => sum + item.quantity, 0)} items
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-orange-600">
-                      ${order.total.toFixed(2)}
-                    </p>
-                    <p className="text-sm text-slate-600">
-                      {order.items.reduce((sum, item) => sum + item.quantity, 0)} items
-                    </p>
+
+                  {/* Quick Summary */}
+                  <div className="flex items-center gap-4 text-sm">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-slate-600">Customer:</span>
+                      <span className="font-medium text-slate-900">{order.customerName}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-slate-600">Phone:</span>
+                      <span className="font-medium text-slate-900">{order.customerPhone}</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Quick Info */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <p className="text-sm text-slate-600">Customer</p>
-                    <p className="font-semibold">{order.customerName}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-slate-600">Delivery Address</p>
-                    <p className="font-semibold">{order.deliveryAddress}</p>
-                  </div>
-                </div>
-
-                {/* Toggle Button */}
+                {/* View Details Button */}
                 <button
                   onClick={() =>
                     setExpandedOrder(expandedOrder === order.id ? null : order.id)
                   }
-                  className="w-full flex items-center justify-center gap-2 text-orange-600 font-semibold hover:bg-orange-50 dark:hover:bg-teal-900/20 py-2 rounded-lg transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 border-t border-slate-100 transition-colors flex items-center justify-center gap-2 text-sm font-semibold text-slate-700"
                 >
                   {expandedOrder === order.id ? (
                     <>
-                      Hide Details
-                      <ChevronUp className="w-5 h-5" />
+                      Hide Items
+                      <ChevronUp className="w-4 h-4" />
                     </>
                   ) : (
                     <>
-                      View Details
-                      <ChevronDown className="w-5 h-5" />
+                      View Items ({order.items.length})
+                      <ChevronDown className="w-4 h-4" />
                     </>
                   )}
                 </button>
-              </div>
 
-              {/* Expanded Details */}
-              {expandedOrder === order.id && (
-                <div className="border-t border-slate-200 p-6 bg-slate-50/50">
-                  <h4 className="font-bold mb-4">Order Items</h4>
-                  <div className="space-y-3">
-                    {order.items.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex gap-4 bg-white p-4 rounded-xl"
-                      >
-                        <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-slate-200 dark:bg-slate-700 shrink-0">
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            fill
-                            className="object-cover"
-                            sizes="64px"
-                          />
-                        </div>
-                        <div className="flex-1">
-                          <h5 className="font-bold">{item.name}</h5>
-                          <p className="text-sm text-slate-600">
-                            Quantity: {item.quantity}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-bold text-orange-600">
-                            ${(item.price * item.quantity).toFixed(2)}
-                          </p>
-                          <p className="text-sm text-slate-600">
-                            ${item.price.toFixed(2)} each
-                          </p>
-                        </div>
+                {/* Expanded Details */}
+                {expandedOrder === order.id && (
+                  <div className="border-t border-slate-100 bg-slate-50">
+                    <div className="p-4">
+                      <div className="space-y-3">
+                        {order.items.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center gap-3 bg-white p-3 rounded-lg border border-slate-200"
+                          >
+                            <div className="relative w-14 h-14 rounded-md overflow-hidden bg-slate-200 flex-shrink-0">
+                              <Image
+                                src={item.image}
+                                alt={item.name}
+                                fill
+                                className="object-cover"
+                                sizes="56px"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h5 className="font-semibold text-slate-900 text-sm truncate">{item.name}</h5>
+                              <p className="text-xs text-slate-500 mt-0.5">
+                                ${item.price.toFixed(2)} × {item.quantity}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <p className="font-bold text-slate-900">
+                                ${(item.price * item.quantity).toFixed(2)}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
 
-                  <div className="mt-6 pt-4 border-t border-slate-200">
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-slate-600">Contact</span>
-                        <span className="font-semibold">{order.customerPhone}</span>
+                      {/* Order Summary */}
+                      <div className="mt-4 pt-4 border-t border-slate-200 space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-600">Subtotal</span>
+                          <span className="font-medium text-slate-900">
+                            ${order.items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-600">Tax (10%)</span>
+                          <span className="font-medium text-slate-900">
+                            ${(order.items.reduce((sum, item) => sum + item.price * item.quantity, 0) * 0.1).toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-base font-bold pt-2 border-t border-slate-200">
+                          <span className="text-slate-900">Total</span>
+                          <span className="text-orange-600">${order.total.toFixed(2)}</span>
+                        </div>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-600">Email</span>
-                        <span className="font-semibold">{order.customerEmail}</span>
-                      </div>
+
+                      {/* Additional Info */}
                       {order.status === "pending" && (
-                        <div className="flex justify-between">
-                          <span className="text-slate-600">
-                            Estimated Delivery
-                          </span>
-                          <span className="font-semibold text-orange-600">
-                            {new Date(order.estimatedDelivery).toLocaleTimeString("en-US", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </span>
+                        <div className="mt-4 bg-orange-50 border border-orange-200 rounded-lg p-3">
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-orange-600" />
+                            <span className="text-sm text-slate-700">
+                              <span className="font-semibold">Estimated Ready:</span>{" "}
+                              {new Date(order.estimatedDelivery).toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </span>
+                          </div>
                         </div>
                       )}
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ export interface MenuItem {
   description: string;
   price: number;
   category: "appetizer" | "main-course" | "dessert" | "beverage";
+  cuisine: "indian" | "chinese" | "south-indian" | "italian" | "mexican" | "american";
   image: string;
   isVegetarian: boolean;
   isSpicy: boolean;
